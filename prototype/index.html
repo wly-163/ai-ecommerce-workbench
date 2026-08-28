@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>智操台 · AI电商智慧运营工作台 原型</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="gate on" id="gate">
+    <div class="gate-brand">
+      <div class="logo">智</div>
+      <h2>智操台</h2>
+      <p>AI 电商智慧运营工作台。登录后按角色进入导购、客服、供应链、营销与低代码编排。</p>
+      <div class="gate-chips">
+        <span>JWT 登录</span>
+        <span>RBAC 角色权限</span>
+        <span>操作级授权</span>
+      </div>
+    </div>
+    <div class="gate-form">
+      <form class="gate-card" id="login-form">
+        <h3>登录账号</h3>
+        <p class="sub">演示环境，点击下方角色即可进入；密码统一 123456。</p>
+        <div class="field"><label>用户名</label><input name="user" value="admin" autocomplete="username" /></div>
+        <div class="field"><label>密码</label><input name="pass" type="password" value="123456" autocomplete="current-password" /></div>
+        <div class="err" id="login-err"></div>
+        <button class="btn primary" type="submit">登录</button>
+        <p class="sub" style="margin:16px 0 8px">演示账号 · 体验不同权限</p>
+        <div class="demo-grid" id="demo-accounts"></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="app" id="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">智</div>
+        <div>
+          <h1>智操台</h1>
+          <small>AI Ops Workbench</small>
+        </div>
+      </div>
+      <nav class="nav">
+        <div class="nav-label">总览</div>
+        <button class="nav-item active" data-view="dashboard" data-perm="dashboard.view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          运营总览
+        </button>
+        <div class="nav-label">四大场景</div>
+        <button class="nav-item" data-view="guide" data-perm="guide.use">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+          智能导购
+        </button>
+        <button class="nav-item" data-view="service" data-perm="service.use">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3"/><path d="M5 19a7 7 0 0 1 14 0"/><path d="M19 8h2M3 8h2M12 3V1"/></svg>
+          智能客服
+        </button>
+        <button class="nav-item" data-view="supply" data-perm="supply.view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/></svg>
+          供应链预测
+          <span class="badge-dot">8</span>
+        </button>
+        <button class="nav-item" data-view="marketing" data-perm="marketing.use">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-7h6v7"/></svg>
+          营销内容
+        </button>
+        <div class="nav-label">编排与可视化</div>
+        <button class="nav-item" data-view="workflow" data-perm="workflow.edit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="12" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8.5 7.5 15.5 11M8.5 16.5 15.5 13"/></svg>
+          工作流编排
+        </button>
+        <button class="nav-item" data-view="scene3d" data-perm="scene3d.view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 21 8v8l-9 5-9-5V8z"/><path d="M12 13V3M12 13l9-5M12 13 3 8"/></svg>
+          3D数据大屏
+        </button>
+        <button class="nav-item" data-view="observe" data-perm="observe.view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-6 3 4 5-7"/></svg>
+          可观测性
+        </button>
+        <div class="nav-label">原型</div>
+        <button class="nav-item" data-view="drafts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 14l4-3 4 3 10-7"/></svg>
+          UI 设计稿
+        </button>
+        <div class="nav-label" data-group="system">系统管理</div>
+        <button class="nav-item" data-view="iam" data-perm="iam.manage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16 11h6M19 8v6"/></svg>
+          权限与角色
+        </button>
+      </nav>
+      <div class="user">
+        <div class="user-meta">
+          <div class="avatar" id="user-avatar">林</div>
+          <div>
+            <b id="user-name">林运营</b>
+            <span id="user-role">运营经理</span>
+          </div>
+        </div>
+        <button class="btn ghost" id="btn-logout" type="button">退出</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="crumb">智操台 / <b id="crumb">运营总览</b></div>
+        <div class="search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+          <input placeholder="搜索商品 / 工作流 / 订单…" />
+        </div>
+        <div class="top-actions">
+          <span class="pill"><i class="live"></i> 实时 · 4 Agents 在线</span>
+          <button class="btn ghost" id="btn-compare">对照设计稿</button>
+          <button class="icon-btn" title="通知"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="n">8</span></button>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- 运营总览 -->
+        <section class="view active" id="view-dashboard">
+          <h2 class="page">运营总览</h2>
+          <p class="sub">管理者一眼看清 GMV、转化、客服渗透与库存风险，并从预警跳到行动。</p>
+          <div class="kpis">
+            <div class="card kpi"><div class="k">GMV</div><div class="v">¥1,284,600</div><div class="d up">↑ 12.4% 较昨日</div></div>
+            <div class="card kpi"><div class="k">转化率</div><div class="v">3.8%</div><div class="d up">↑ 0.6pp 较昨日</div></div>
+            <div class="card kpi"><div class="k">AI 客服渗透率</div><div class="v">72%</div><div class="d up">↑ 5.7pp 较昨日</div></div>
+            <div class="card kpi alert"><div class="k">库存告警</div><div class="v">8 SKU</div><div class="d down">↑ 2 较昨日</div></div>
+          </div>
+          <div class="dash-mid">
+            <div class="card">
+              <div class="card-h">近 7 日 GMV 与订单量 <span>青绿 GMV · 靛蓝 订单</span></div>
+              <svg class="chart" viewBox="0 0 560 200" preserveAspectRatio="none">
+                <polyline fill="none" stroke="#0f766e" stroke-width="2.2" points="20,140 100,120 180,70 260,90 340,100 420,85 540,40"/>
+                <polyline fill="none" stroke="#4f46e5" stroke-width="2.2" points="20,160 100,150 180,110 260,130 340,125 420,118 540,80"/>
+              </svg>
+            </div>
+            <div class="card">
+              <div class="card-h">热销品类</div>
+              <div class="bars">
+                <div class="bar-row">女装 <div class="track"><i style="width:32%"></i></div> 32%</div>
+                <div class="bar-row">鞋靴 <div class="track"><i style="width:21%;background:#818cf8"></i></div> 21%</div>
+                <div class="bar-row">美妆 <div class="track"><i style="width:18%;background:#34d399"></i></div> 18%</div>
+                <div class="bar-row">数码 <div class="track"><i style="width:15%;background:#fbbf24"></i></div> 15%</div>
+              </div>
+            </div>
+          </div>
+          <div class="dash-bot">
+            <div class="card">
+              <div class="card-h">供应链预警 <button class="link" data-view="supply">查看全部 →</button></div>
+              <table class="table">
+                <thead><tr><th>商品</th><th>风险</th><th>预计断货</th><th>建议</th></tr></thead>
+                <tbody>
+                  <tr><td class="prod"><span class="thumb">衫</span>防晒衫 UPF50+</td><td><span class="tag hi">高风险</span></td><td>3 天</td><td>补货 500 件</td></tr>
+                  <tr><td class="prod"><span class="thumb">拖</span>海边拖鞋</td><td><span class="tag mid">中风险</span></td><td>5 天</td><td>补货 300 件</td></tr>
+                  <tr><td class="prod"><span class="thumb">丝</span>冰丝衫</td><td><span class="tag lo">正常</span></td><td>—</td><td>维持库存</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <div class="card-h">Agent 协作</div>
+              <div class="feed">
+                <div class="feed-item"><i></i><div>导购 Agent 已生成 128 条搭配<p>意图识别 → RAG → Rerank → 话术</p></div><span class="t">10:24</span></div>
+                <div class="feed-item"><i style="background:#fbbf24"></i><div>客服 Agent 转人工 3 单<p>大额退款触发 Human-in-the-Loop</p></div><span class="t">10:18</span></div>
+                <div class="feed-item"><i style="background:#34d399"></i><div>供应链 Agent 推送补货清单<p>一店一策 · 海滨店优先</p></div><span class="t">10:12</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 智能导购 -->
+        <section class="view" id="view-guide">
+          <div class="split-3">
+            <div class="card col">
+              <div class="card-h">会话 <span>导购 / 客服</span></div>
+              <div class="thread on">
+                <div class="row"><b>海边度假穿搭</b><span class="meta">进行中</span></div>
+                <p>预算 400 以内，要白色</p>
+              </div>
+              <div class="thread">
+                <div class="row"><b>防晒衣推荐</b><span class="meta">12:08</span></div>
+                <p>有没有 UPF50+ 的薄款</p>
+              </div>
+              <div class="thread">
+                <div class="row"><b>尺码咨询</b><span class="meta">已解决</span></div>
+                <p>M 码会不会偏大</p>
+              </div>
+            </div>
+            <div class="card chat">
+              <div class="chat-h"><b>海边度假 · 防晒拍照</b><span class="tag info">多轮对话</span></div>
+              <div class="msgs" id="guide-msgs">
+                <div class="bubble user">帮我搭一套去海边度假、防晒、拍照好看的衣服</div>
+                <div class="bubble ai">
+                  已理解复合意图：
+                  <div class="chips"><span class="tag info">场景·海边度假</span><span class="tag info">需求·防晒</span><span class="tag ind">风格·拍照</span></div>
+                  从商品知识库召回 12 件，Rerank 后推荐这一套：
+                  <div class="goods">
+                    <div class="good"><div class="ph"></div><b>防晒衫 UPF50+</b><em>¥189</em></div>
+                    <div class="good"><div class="ph" style="background:linear-gradient(160deg,#2a3348,#1b2436)"></div><b>雪纺宽裤</b><em>¥129</em></div>
+                    <div class="good"><div class="ph" style="background:linear-gradient(160deg,#3a3320,#241e14)"></div><b>草编帽</b><em>¥59</em></div>
+                  </div>
+                </div>
+                <div class="bubble user">预算 400 以内，要白色</div>
+                <div class="bubble ai">已把上衣换成白色薄款，三件合计 <b>¥377</b>，仍在预算内。需要我对比另一套更偏度假感的吗？</div>
+              </div>
+              <form class="composer" id="guide-form">
+                <input name="q" placeholder="继续追问、改条件、对比商品…" autocomplete="off" />
+                <button class="btn primary" type="submit">发送</button>
+              </form>
+            </div>
+            <div class="card">
+              <div class="side-block">
+                <h4>用户画像</h4>
+                <div class="kv"><span>尺码</span><b>M</b><span>体型</span><b>偏瘦</b><span>历史购买</span><b>6 单</b></div>
+              </div>
+              <div class="side-block">
+                <h4>本次意图</h4>
+                <div class="chips"><span class="tag info">海边</span><span class="tag info">防晒</span><span class="tag info">白色</span><span class="tag ind">&lt;¥400</span></div>
+              </div>
+              <div class="side-block">
+                <h4>Agent 链路 · 1.8s / 642 tokens</h4>
+                <div class="steps">
+                  <div class="step"><span class="ok">✓</span> 意图识别 0.18s</div>
+                  <div class="step"><span class="ok">✓</span> RAG 双路召回 0.42s</div>
+                  <div class="step"><span class="ok">✓</span> Reranker 精排 0.36s</div>
+                  <div class="step"><span class="ok">✓</span> LLM 推荐生成 0.84s</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 智能客服 -->
+        <section class="view" id="view-service">
+          <div class="split-3">
+            <div class="card col">
+              <div class="card-h">售后会话 <span>18</span></div>
+              <div class="thread on">
+                <div class="row"><b>换货 · 鞋码不对</b><span class="tag hi">高风险</span></div>
+                <p>我昨天买的鞋码数不对…</p>
+              </div>
+              <div class="thread">
+                <div class="row"><b>物流催单</b><span class="tag mid">中风险</span></div>
+                <p>快递三天没动了</p>
+              </div>
+              <div class="thread">
+                <div class="row"><b>发票咨询</b><span class="tag lo">低风险</span></div>
+                <p>能开专票吗</p>
+              </div>
+            </div>
+            <div class="card chat">
+              <div class="chat-h"><b>换货 · 鞋码不对</b><span class="tag hi">待人工审核</span></div>
+              <div class="msgs">
+                <div class="bubble user">我昨天买的鞋码数不对，想换货</div>
+                <div class="bubble ai">
+                  已路由至售后 Agent。正在核验订单与政策。
+                  <div class="order">
+                    <div class="thumb" style="width:48px;height:48px">鞋</div>
+                    <div>
+                      <b>订单 20260827-8821</b>
+                      <p style="color:var(--muted)">海边跑步鞋 · 42 码 · 已签收 · ¥289</p>
+                    </div>
+                  </div>
+                  <div class="chips"><span class="tag lo">政策命中</span><span class="tag info">签收 7 天内可换货</span><span class="tag info">尺码问题免运费</span></div>
+                  <div class="steps" style="margin-top:8px">
+                    <div class="step"><span class="ok">✓</span> 1 查订单</div>
+                    <div class="step"><span class="ok">✓</span> 2 判断资格 · 通过</div>
+                    <div class="step">3 填写换货 · 等待用户</div>
+                  </div>
+                </div>
+                <div class="alert warn">金额阈值触发 Human-in-the-Loop，已转人工审核（规则：退款额 &gt; ¥200）。</div>
+              </div>
+              <form class="composer" onsubmit="event.preventDefault()">
+                <input placeholder="回复用户 / 内部备注…" />
+                <button class="btn primary" type="button">发送</button>
+              </form>
+            </div>
+            <div class="card">
+              <div class="side-block">
+                <h4>意图路由</h4>
+                <div class="kv"><span>识别</span><b>换货 · 尺码</b><span>路由</span><b>aftersales_agent</b><span>置信度</span><b>0.96</b></div>
+              </div>
+              <div class="side-block">
+                <h4>G-Eval 忠实度</h4>
+                <div class="bar-row" style="grid-template-columns:72px 1fr 36px">忠实度 <div class="track"><i style="width:94%"></i></div> 0.94</div>
+                <div class="bar-row" style="grid-template-columns:72px 1fr 36px;margin-top:8px">相关性 <div class="track"><i style="width:92%;background:#818cf8"></i></div> 0.92</div>
+              </div>
+              <div class="side-block">
+                <h4>人工决策</h4>
+                <p style="color:var(--muted);margin-bottom:10px">通过后将引导用户完成换货；驳回则回退到政策说明。</p>
+                <div style="display:flex;gap:8px">
+                  <button class="btn success need-perm" data-perm="service.hitl" id="btn-pass">通过</button>
+                  <button class="btn danger need-perm" data-perm="service.hitl" id="btn-reject">驳回</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 供应链 -->
+        <section class="view" id="view-supply">
+          <div class="toolbar">
+            <div>
+              <h2 class="page">供应链智能预测</h2>
+              <p class="sub">一店一策 · 差异化补货，从经验驱动转向数据驱动。</p>
+            </div>
+            <div class="filters">
+              <select class="select"><option>未来 14 天</option></select>
+              <select class="select"><option>全部门店</option><option>海滨店</option></select>
+              <button class="btn">导出清单</button>
+              <button class="btn primary need-perm" data-perm="supply.create_po" id="btn-po">生成采购单</button>
+            </div>
+          </div>
+          <div class="alert warn" style="margin-bottom:12px">
+            <span>防晒衫 UPF50+ 预计 <b>3 天后断货</b>，建议补货 <b>500 件</b>。</span>
+            <span><button class="btn warn need-perm" data-perm="supply.approve" id="btn-accept">采纳建议</button> <button class="btn ghost">忽略</button></span>
+          </div>
+          <div class="split-2">
+            <div class="card">
+              <div class="card-h">智能补货清单</div>
+              <table class="table">
+                <thead><tr><th></th><th>SKU</th><th>品名</th><th>门店</th><th>库存</th><th>安全水位</th><th>预测 7 日</th><th>建议补货</th><th>风险</th></tr></thead>
+                <tbody>
+                  <tr><td><input type="checkbox" checked /></td><td>8821</td><td>防晒衫 UPF50+</td><td>海滨店</td><td class="num-hi">42</td><td>200</td><td>186</td><td>500</td><td><span class="tag hi">高</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>7740</td><td>海边拖鞋</td><td>海滨店</td><td class="num-hi">98</td><td>180</td><td>140</td><td>300</td><td><span class="tag mid">中</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>6612</td><td>冰丝衫</td><td>中心店</td><td class="num-ok">320</td><td>160</td><td>90</td><td>0</td><td><span class="tag lo">低</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>5508</td><td>厚外套</td><td>机场店</td><td class="num-ok">420</td><td>80</td><td>12</td><td>淘汰</td><td><span class="tag mid">中</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <div class="card" style="margin-bottom:12px">
+                <div class="card-h">SKU-8821 销量预测</div>
+                <svg class="chart" viewBox="0 0 360 160">
+                  <polyline fill="none" stroke="#94a3b8" stroke-width="2" points="10,110 70,90 130,95 190,70"/>
+                  <polyline fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="5 4" points="190,70 250,48 310,30 350,38"/>
+                </svg>
+              </div>
+              <div class="card">
+                <div class="card-h">选品分析</div>
+                <div class="side-block"><span class="tag lo">推荐新品</span><p style="margin-top:6px">冰丝衫 · 预估贡献销量 1,250</p></div>
+                <div class="side-block"><span class="tag hi">淘汰品</span><p style="margin-top:6px">厚外套 · 季节回落，建议清仓 680</p></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 营销 -->
+        <section class="view" id="view-marketing">
+          <h2 class="page">营销内容工作坊</h2>
+          <p class="sub" style="margin-bottom:14px">从商品链接生成直播脚本、短视频与多语言文案。</p>
+          <div class="mkt">
+            <div class="card" style="padding:14px">
+              <div class="field"><label>商品链接</label><input value="https://item.example.com/upf50" /></div>
+              <div class="order"><div class="thumb" style="width:48px;height:48px">衫</div><div><b>防晒衫 UPF50+</b><p style="color:var(--muted)">¥189 · 库存 3287</p></div></div>
+              <div class="field"><label>营销目标</label>
+                <div class="chips"><span class="tag info">促转化</span><span class="tag" style="background:var(--surface-3);color:var(--muted)">拉新</span><span class="tag" style="background:var(--surface-3);color:var(--muted)">清仓</span></div>
+              </div>
+              <div class="field"><label>渠道</label><select><option>抖音直播</option><option>短视频</option></select></div>
+              <div class="field"><label>语言</label>
+                <div class="chips"><span class="tag info">中文</span><span class="tag ind">英文</span><span class="tag" style="background:var(--surface-3);color:var(--muted)">日语</span></div>
+              </div>
+              <button class="btn primary" style="width:100%" id="btn-gen">生成内容</button>
+            </div>
+            <div class="card">
+              <div class="tabs">
+                <button class="tab on">直播脚本</button>
+                <button class="tab">商品文案</button>
+                <button class="tab">短视频脚本</button>
+              </div>
+              <div class="script">
+                <div class="line"><time>00:00</time><div><span class="tag info">互动</span><p>姐妹们今天这件防晒衫真的太香了，海边拍照不闷不黑。</p></div></div>
+                <div class="line"><time>00:18</time><div><span class="tag ind">买点</span><p>UPF50+ 原纱织造，薄到能看见光，但紫外线过不去。</p></div></div>
+                <div class="line"><time>00:40</time><div><span class="tag info">互动</span><p>评论区打 1，我把尺码表挂出来。M 码适合 80–110 斤。</p></div></div>
+                <div class="line"><time>01:10</time><div><span class="tag hi">促单</span><p>直播间再降 20，库存只剩这波。拍下送草编帽。</p></div></div>
+              </div>
+              <div class="composer"><button class="btn">复制脚本</button><button class="btn">导出</button><button class="btn" disabled>发送推流（P2）</button></div>
+            </div>
+            <div class="card">
+              <div class="side-block">
+                <h4>多语言标题</h4>
+                <p>防晒到能海边蹦迪的薄衬衫</p>
+                <p style="color:var(--muted);margin-top:6px">UPF50+ Beach Shirt that still photographs well</p>
+                <p style="color:var(--muted);margin-top:6px">海でも映える UPF50+ シャツ</p>
+              </div>
+              <div class="side-block">
+                <h4>任务状态</h4>
+                <div class="steps">
+                  <div class="step"><span class="ok">✓</span> 脚本已生成</div>
+                  <div class="step">TTS 语音合成 · 即将推出</div>
+                  <div class="step">数字人推流 · P2</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 工作流 -->
+        <section class="view" id="view-workflow">
+          <div class="toolbar" style="margin-top:0">
+            <div>
+              <h2 class="page">智能导购 · 多轮推荐 v1.2 <span class="tag lo">已发布</span></h2>
+              <p class="sub">低代码 DAG · 拖拽节点、连线、配置后保存到后端。</p>
+            </div>
+            <div class="filters">
+              <button class="btn" id="btn-run">运行测试</button>
+              <button class="btn">保存</button>
+              <button class="btn primary need-perm" data-perm="workflow.publish">发布</button>
+            </div>
+          </div>
+          <div class="wf">
+            <div class="card palette">
+              <div class="card-h">节点库</div>
+              <div class="node-lib" style="padding:10px">
+                <button>Input · 用户问句</button>
+                <button>LLM · 意图 / 生成</button>
+                <button>RAG · 知识库</button>
+                <button>Reranker · 精排</button>
+                <button>Condition · 分支</button>
+                <button>Human Review</button>
+                <button>Output · 话术</button>
+              </div>
+            </div>
+            <div class="canvas" id="canvas">
+              <div class="canvas-inner">
+              <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+                <path d="M 190 70 C 240 70, 240 70, 270 70" stroke="#22d3ee" fill="none" stroke-width="1.6"/>
+                <path d="M 438 70 C 480 70, 480 40, 520 40" stroke="#22d3ee" fill="none" stroke-width="1.6"/>
+                <path d="M 438 70 C 480 70, 480 160, 520 160" stroke="#818cf8" fill="none" stroke-width="1.6"/>
+                <path d="M 688 40 C 730 40, 730 110, 760 110" stroke="#22d3ee" fill="none" stroke-width="1.6"/>
+                <path d="M 688 160 C 730 160, 730 120, 760 120" stroke="#818cf8" fill="none" stroke-width="1.6"/>
+                <path d="M 928 110 C 970 110, 970 70, 1010 70" stroke="#34d399" fill="none" stroke-width="1.6"/>
+                <path d="M 928 110 C 970 110, 970 200, 1010 200" stroke="#fbbf24" fill="none" stroke-width="1.6"/>
+              </svg>
+              <div class="wnode" style="left:22px;top:48px"><div class="type">INPUT</div><b>用户问句</b><div class="ms">—</div></div>
+              <div class="wnode on" data-node="intent" style="left:270px;top:48px"><div class="type">LLM</div><b>意图识别</b><div class="ms">180ms</div></div>
+              <div class="wnode" style="left:520px;top:18px"><div class="type">RAG</div><b>商品知识库</b><div class="ms">420ms</div></div>
+              <div class="wnode" style="left:520px;top:138px"><div class="type">BM25</div><b>关键词召回</b><div class="ms">90ms</div></div>
+              <div class="wnode" style="left:760px;top:88px"><div class="type">RERANK</div><b>精排</b><div class="ms">360ms</div></div>
+              <div class="wnode" style="left:1010px;top:48px"><div class="type">OUTPUT</div><b>推荐话术</b><div class="ms">true</div></div>
+              <div class="wnode" style="left:1010px;top:178px"><div class="type">HITL</div><b>人工审核</b><div class="ms">false</div></div>
+              </div>
+            </div>
+            <div class="card" style="padding:14px">
+              <div class="card-h" style="padding:0 0 10px;margin-bottom:10px">意图识别 · LLM</div>
+              <div class="field"><label>模型</label><select><option>DeepSeek-V3</option><option>Qwen-Plus</option></select></div>
+              <div class="field"><label>Temperature</label><input value="0.2" /></div>
+              <div class="field"><label>System Prompt</label><textarea>从用户问句中抽取场景、款式、预算、尺码等槽位，输出 JSON。</textarea></div>
+              <div class="side-block" style="padding:0">
+                <h4>最近一次运行</h4>
+                <p style="color:var(--muted)">成功 · 1.2s · in 286 / out 128 tokens</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3D -->
+        <section class="view" id="view-scene3d">
+          <div class="scene">
+            <div class="scene-ui layers card">
+              <button class="tab on">库位</button>
+              <button class="tab">物流路径</button>
+              <button class="tab">热力</button>
+              <button class="tab">仓库视角</button>
+            </div>
+            <div class="scene-ui legend card">
+              <span class="tag lo">正常</span>
+              <span class="tag mid">预警</span>
+              <span class="tag hi">缺货</span>
+            </div>
+            <div class="scene-ui sat card">
+              <div class="card-h">库存卫星 · 8 告警</div>
+              <table class="table">
+                <tr><td>8821</td><td class="num-hi">42 / 200</td><td><span class="tag hi">缺货</span></td></tr>
+                <tr><td>7740</td><td class="num-hi">98 / 180</td><td><span class="tag mid">预警</span></td></tr>
+                <tr><td>6612</td><td class="num-ok">320 / 160</td><td><span class="tag lo">正常</span></td></tr>
+              </table>
+              <div style="padding:10px"><button class="btn primary" style="width:100%" data-view="supply">生成补货清单</button></div>
+            </div>
+            <div class="scene-ui tip card">
+              <b>防晒衫 UPF50+</b>
+              <p style="color:var(--muted);margin:4px 0">SKU-8821 · 库存 42 · 安全线 200</p>
+              <p>预计 3 天断货 · 建议补货 500</p>
+            </div>
+            <div class="wh-stage">
+              <div class="wh">
+                <div class="floor"></div>
+                <div class="path"></div>
+                <div class="aisles" id="aisles"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 可观测性 -->
+        <section class="view" id="view-observe">
+          <h2 class="page">执行追踪</h2>
+          <p class="sub" style="margin-bottom:14px">每个节点的输入 / 输出 / 耗时 / Tokens，让 Agent 决策可审计。</p>
+          <div class="card">
+            <div class="card-h">run_20260828_guide_1842 <span>成功 · 1.82s · 642 tokens · DeepSeek-V3</span></div>
+            <div class="trace">
+              <div class="span"><b>intent</b><div class="track"><i class="bar" style="width:10%"></i></div> 0.18s</div>
+              <div class="span"><b>rag_vector</b><div class="track"><i class="bar" style="width:23%;background:#818cf8"></i></div> 0.42s</div>
+              <div class="span"><b>rag_bm25</b><div class="track"><i class="bar" style="width:5%;background:#34d399"></i></div> 0.09s</div>
+              <div class="span"><b>rerank</b><div class="track"><i class="bar" style="width:20%;background:#fbbf24"></i></div> 0.36s</div>
+              <div class="span"><b>llm_gen</b><div class="track"><i class="bar" style="width:46%"></i></div> 0.84s</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 权限与角色 -->
+        <section class="view" id="view-iam">
+          <h2 class="page">权限与角色</h2>
+          <p class="sub" style="margin-bottom:14px">账号绑定角色，角色绑定权限。菜单可见性与敏感操作（转人工审核、补货采纳、工作流发布）都走同一套权限点。</p>
+          <div class="tabs" id="iam-tabs">
+            <button class="tab on" data-iam="users">账号管理</button>
+            <button class="tab" data-iam="roles">角色管理</button>
+            <button class="tab" data-iam="matrix">权限矩阵</button>
+          </div>
+          <div id="iam-users" class="card" style="margin-top:12px">
+            <div class="card-h">账号列表 <button class="btn" type="button" id="btn-add-user">+ 新建账号</button></div>
+            <table class="table" id="user-table"></table>
+          </div>
+          <div id="iam-roles" class="iam" style="display:none;margin-top:12px">
+            <div class="card">
+              <div class="card-h">角色 <button class="btn" type="button">+ 新建角色</button></div>
+              <div id="role-list" style="padding:8px"></div>
+            </div>
+            <div class="card" style="padding:14px">
+              <div class="card-h" style="padding:0 0 12px;margin-bottom:12px"><span id="role-edit-title">运营经理</span> <button class="btn primary" id="btn-save-role">保存权限</button></div>
+              <div id="perm-editor"></div>
+            </div>
+          </div>
+          <div id="iam-matrix" class="card" style="display:none;margin-top:12px;overflow:auto">
+            <div class="card-h">角色 × 权限</div>
+            <table class="table matrix" id="perm-matrix"></table>
+          </div>
+        </section>
+
+        <!-- 设计稿 -->
+        <section class="view" id="view-drafts">
+          <h2 class="page">UI 设计稿</h2>
+          <p class="sub" style="margin-bottom:14px">浅色版以可点击原型为准。下方为登录、权限、总览的高保真稿；其余场景页可在原型中直接点开。</p>
+          <div class="gallery">
+            <figure class="shot" data-src="mockups/ui-login-light.png"><img src="mockups/ui-login-light.png" alt="登录" /><figcaption>登录 <span>账号入口</span></figcaption></figure>
+            <figure class="shot" data-src="mockups/ui-dashboard-light.png"><img src="mockups/ui-dashboard-light.png" alt="运营总览" /><figcaption>运营总览 <span>浅色</span></figcaption></figure>
+            <figure class="shot" data-src="mockups/ui-iam-light.png"><img src="mockups/ui-iam-light.png" alt="权限" /><figcaption>权限与角色 <span>RBAC</span></figcaption></figure>
+            <figure class="shot" data-src="mockups/ui-chat-guide.png"><img src="mockups/ui-chat-guide.png" alt="智能导购" /><figcaption>智能导购 <span>深色参考</span></figcaption></figure>
+            <figure class="shot" data-src="mockups/ui-cs-service.png"><img src="mockups/ui-cs-service.png" alt="智能客服" /><figcaption>智能客服 <span>深色参考</span></figcaption></figure>
+            <figure class="shot" data-src="mockups/ui-supply-chain.png"><img src="mockups/ui-supply-chain.png" alt="供应链" /><figcaption>供应链预测 <span>深色参考</span></figcaption></figure>
+            <figure class="shot" data-src="mockups/ui-marketing.png"><img src="mockups/ui-marketing.png" alt="营销" /><figcaption>营销内容 <span>深色参考</span></figcaption></figure>
+            <figure class="shot" data-src="mockups/ui-workflow.png"><img src="mockups/ui-workflow.png" alt="工作流" /><figcaption>工作流编排 <span>深色参考</span></figcaption></figure>
+            <figure class="shot" data-src="mockups/ui-3d-scene.png"><img src="mockups/ui-3d-scene.png" alt="3D" /><figcaption>3D 数据大屏 <span>深色参考</span></figcaption></figure>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox"><img alt="设计稿放大" /></div>
+  <div class="compare" id="compare"><img alt="对照" /></div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -41,7 +41,7 @@
 | 测试          | `pytest (后端) + Vitest (前端)`                   | `Python/JS生态标准测试框架`                                  |
 | 格式/静态检查 | `ruff (后端) + ESLint + Prettier (前端)`          | `ruff速度极快,替代black/isort/flake8;ESLint+Prettier前端标准` |
 | 打包/运行     | `Docker + Docker Compose`                         | `一键启动所有服务(前端/后端/PostgreSQL/Redis),降低试用门槛`  |
-| CI/CD         | GitHub Actions                                    | `通用、可视化、适合开源项目与团队协作`                       |
+| CI/CD         | GitHub Actions + Vercel(前端) + Railway(后端)     | `无自有服务器;CI 在 PR 上跑门禁,合并 main 后 PaaS 自动部署` |
 
 ## 3. 目录地图
 
@@ -135,15 +135,29 @@ ai-ecommerce-workbench/
 
 ## 6. 部署/CI 占位符取值
 
-> `guides/` 和 workflow 里的通用占位符,在本项目里的真实值只写这里。
+> **部署策略(ADR)**:无自有服务器,采用 **方案 B · PaaS** — 前端 Vercel、后端 Railway;本地开发仍用 `docker-compose`。
+> 课堂 SSH CD 模板(`SSH_PRIVATE_KEY`/`SSH_HOST`/`SSH_USER`)**本项目不使用**。
 
-| 占位符          | 本项目取值                       | 说明                       |
-| --------------- | -------------------------------- | -------------------------- |
-| `<APP>`         | `ai-ecommerce-workbench`         | 应用名/镜像名/容器名       |
-| `<DEPLOY_DIR>`  | `/opt/ai-ecommerce-workbench`    | 服务器部署目录             |
-| `<PORT>`        | `8000` (后端) / `5173` (前端Dev) | 服务端口                   |
-| `<PYVER>`       | `3.11`                           | Python版本                 |
-| `<NODEVER>`     | `20`                             | Node版本                   |
-| `<HEALTHCHECK>` | `/health`                        | 健康检查地址               |
-| `<SSH_USER>`    | `deploy`                         | 部署用户(生产)             |
-| `<SSH_HOST>`    | `your-server-ip-or-domain`       | 服务器公网 IP 或域名(占位) |
+| 占位符          | 本项目取值                              | 说明                              |
+| --------------- | --------------------------------------- | --------------------------------- |
+| `<APP>`         | `ai-ecommerce-workbench`                | 应用名/镜像名                     |
+| `<FRONTEND_URL>`| `https://<vercel-project>.vercel.app`   | Vercel 部署地址(创建项目后填入)   |
+| `<BACKEND_URL>` | `https://<railway-service>.up.railway.app` | Railway 部署地址(创建服务后填入) |
+| `<PORT>`        | `8000` (后端容器) / `5173` (前端 Dev)   | 本地/容器内端口                   |
+| `<PYVER>`       | `3.11`                                  | Python 版本                       |
+| `<NODEVER>`     | `20`                                    | Node 版本                         |
+| `<HEALTHCHECK>` | `/health`                               | 后端健康检查路径                  |
+| `<DEPLOY_DIR>`  | *(不适用 — PaaS 部署)*                  | —                                 |
+| `<SSH_*>`       | *(不适用 — PaaS 部署)*                  | —                                 |
+
+### 6.1 GitHub Secrets(PaaS CD 所需)
+
+| Secret | 用途 | 配置时机 |
+|---|---|---|
+| `VERCEL_TOKEN` | Vercel CLI/API 部署前端 | 创建 Vercel 项目后 |
+| `VERCEL_ORG_ID` | Vercel 组织 ID | 同上 |
+| `VERCEL_PROJECT_ID` | Vercel 项目 ID | 同上 |
+| `RAILWAY_TOKEN` | Railway CLI/API 部署后端 | 创建 Railway 项目后 |
+
+> 人类需在 **第一次 CD 跑之前** 到 GitHub → Settings → Secrets 配好上述 Token。
+> 本地开发零 PaaS 依赖;`docker-compose up` 即可。

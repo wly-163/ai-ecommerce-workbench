@@ -1,43 +1,97 @@
-## 项目愿景
+## AI 电商智慧运营工作台
+
+> 低代码 AI 工作流平台 · 3D 数字孪生 · 多智能体协作
+
+面向电商企业的 AI 运营工作台,提供智能导购、智能客服、供应链预测、营销内容生成四大核心能力。
 
 ---
 
-### 一句话定位
+### 快速开始
 
-**AI电商智慧运营工作台（E-Commerce AI Ops Workbench）——让电商运营从“经验驱动”进化为“AI驱动的智能决策”。**
+```bash
+# 1. 克隆仓库
+git clone https://github.com/wly-163/ai-ecommerce-workbench.git
+cd ai-ecommerce-workbench
 
----
+# 2. 环境变量
+cp .env.example .env
 
-### 完整愿景声明
+# 3. 一键启动(需 Docker)
+docker-compose up --build
+```
 
-> **我们的愿景是打造一个面向电商企业的低代码AI工作流平台，通过融合3D数字孪生可视化、多智能体协作与可观测性，将AI能力无缝嵌入选品、导购、客服、供应链和营销全链路，帮助运营人员以零代码或低代码的方式构建智能决策流程，让每一个数据洞察都能自动转化为业务行动，最终实现“人机协同、实时响应、持续进化”的智慧电商新范式。**
-
----
-
-### 核心使命（Mission）
-
-- **为运营减负**：用AI取代重复性人工决策，让运营人员聚焦创意与策略。
-- **为转化赋能**：通过智能导购、动态推荐、个性化内容，提升客单价与复购率。
-- **为决策增效**：将供应链、库存、市场趋势可视化，让数据说话、让系统行动。
-- **为技术正名**：展现“前端+AI”融合的工程化能力，证明跨领域开发者同样能构建企业级AI产品。
-
----
-
-### 项目价值观
-
-| 原则           | 说明                                                      |
-| -------------- | --------------------------------------------------------- |
-| **实用性优先** | 每个功能都要解决真实电商场景中的痛点，不搞技术自嗨。      |
-| **可落地闭环** | 从数据输入 → AI推理 → 3D联动 → 自动化执行，形成完整闭环。 |
-| **可观测透明** | 每个AI决策的过程、耗时、成本都可追踪，杜绝“黑盒”恐惧。    |
-| **开放与协作** | 开源优先，鼓励社区贡献，持续演进多智能体生态。            |
+| 服务 | 地址 |
+|---|---|
+| 前端 | http://localhost:5173 |
+| 后端 API | http://localhost:8000 |
+| 健康检查 | http://localhost:8000/health |
+| API 文档 | http://localhost:8000/docs |
 
 ---
 
-### 终极目标
+### 本地开发(无 Docker)
 
-> **让任何一个中小电商企业，在3天内就能搭建一套拥有智能导购、智能客服、智能补货、智能营销的AI运营体系，将运营效率提升50%以上，让AI成为电商增长的“第二引擎”。**
+```bash
+# 后端
+cd backend
+pip install -r requirements-dev.txt
+uvicorn app.main:app --reload --port 8000
+
+# 前端(另开终端)
+cd frontend
+npm install
+npm run dev
+```
 
 ---
 
-复制以上内容，直接粘贴到你的 GitHub `README.md` 文件开头即可。如需调整语气或增删细节，我可以随时帮你优化。
+### 质量检查
+
+```bash
+# 后端
+cd backend
+ruff format --check .
+ruff check .
+pytest --cov=app --cov-fail-under=80
+
+# 前端
+cd frontend
+npm run lint
+npm run format:check
+npm test
+npm run build
+```
+
+---
+
+### 部署
+
+- **前端**: Vercel
+- **后端**: Railway
+- 详见 [docs/deployment.md](docs/deployment.md)
+
+---
+
+### 项目结构
+
+```text
+ai-ecommerce-workbench/
+├── frontend/          # React 19 + Vite + TypeScript
+├── backend/           # FastAPI + Python 3.11
+├── standards/         # 项目规范与活记忆
+├── docs/              # 部署等文档
+├── prototype/         # UI 原型
+└── docker-compose.yml
+```
+
+---
+
+### 开发规范
+
+AI 与开发者请先阅读 `standards/README.md`,按 `00/01/PROGRESS` + `02~06` 规范推进。
+
+---
+
+### 愿景
+
+> 让任何一个中小电商企业,在 3 天内就能搭建一套拥有智能导购、智能客服、智能补货、智能营销的 AI 运营体系。
