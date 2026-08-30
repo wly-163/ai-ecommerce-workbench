@@ -42,10 +42,11 @@ npm run dev
 | Secret | 获取方式 |
 |---|---|
 | `VERCEL_TOKEN` | [vercel.com/account/tokens](https://vercel.com/account/tokens) |
-| `VERCEL_ORG_ID` | Vercel 项目 Settings → General |
-| `VERCEL_PROJECT_ID` | 同上 |
-| `RAILWAY_TOKEN` | [railway.app/account/tokens](https://railway.app/account/tokens) |
-| `RAILWAY_PROJECT_ID` | Railway 项目 → Settings → General → Project ID |
+| `VERCEL_ORG_ID` | Vercel Team Settings → General → Team ID |
+| `VERCEL_PROJECT_ID` | Vercel 项目 Settings → General → Project ID |
+
+> **后端不需要 `RAILWAY_TOKEN`**：Railway 通过 GitHub 集成在 push 到 `main` 时自动部署。
+> GitHub Actions CD 只负责 Vercel 前端部署 + `/health` 健康检查。
 
 可选 Repository Variable:
 - `BACKEND_URL`: Railway 部署后的公网地址(用于 CD 健康检查)
