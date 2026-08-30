@@ -45,6 +45,7 @@ npm run dev
 | `VERCEL_ORG_ID` | Vercel 项目 Settings → General |
 | `VERCEL_PROJECT_ID` | 同上 |
 | `RAILWAY_TOKEN` | [railway.app/account/tokens](https://railway.app/account/tokens) |
+| `RAILWAY_PROJECT_ID` | Railway 项目 → Settings → General → Project ID |
 
 可选 Repository Variable:
 - `BACKEND_URL`: Railway 部署后的公网地址(用于 CD 健康检查)
