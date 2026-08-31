@@ -27,6 +27,14 @@ docker-compose up --build
 | 健康检查 | http://localhost:8000/health |
 | API 文档 | http://localhost:8000/docs |
 
+工作流 API 示例（默认 mock LLM）：
+
+```bash
+curl -X POST http://localhost:8000/api/v1/workflows/execute \
+  -H "Content-Type: application/json" \
+  -d "{\"query\":\"推荐防晒衣\"}"
+```
+
 ---
 
 ### 本地开发(无 Docker)
