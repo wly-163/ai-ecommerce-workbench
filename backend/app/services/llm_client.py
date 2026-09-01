@@ -1,3 +1,11 @@
+# 阅读顺序:
+# 1. LLMClient Protocol — 统一 complete(prompt) 接口
+# 2. MockLLMClient      — CI/默认路径,无外网、无密钥
+# 3. LiveLLMClient      — 可选 DeepSeek(OpenAI 兼容);仅 LLM_MODE=live
+# 4. get_llm_client     — 工厂: 按环境变量切换实现
+#
+# 为何默认 mock: 保证 CI 与本机无 Key 也能跑通工作流图。
+
 from __future__ import annotations
 
 import os
