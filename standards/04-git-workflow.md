@@ -113,6 +113,14 @@ git push
 
 一个 commit 只做一件事。
 
+**本项目约定**:subject / body 使用 **中文**(前缀 `feat:`/`fix:` 等保留英文关键字),例如:
+
+```text
+feat: 添加 LangGraph 推荐工作流 API (US-3)
+
+默认 mock LLM,提供 JSON 与 SSE 两种执行方式。
+```
+
 ---
 
 ## 5. PR 通过三道闸
