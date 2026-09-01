@@ -28,6 +28,8 @@ jobs:
         run: ruff check .
 
       - name: Pytest with coverage
+        env:
+          LLM_MODE: mock
         run: pytest --cov=app --cov-fail-under=80
 
   frontend:

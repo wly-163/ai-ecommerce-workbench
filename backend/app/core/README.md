@@ -6,7 +6,7 @@
 1. app/main.py                 — 挂载路由
 2. app/api/v1/workflows.py     — HTTP 入口(JSON / SSE)
 3. app/core/workflow.py        — LangGraph 状态与节点
-4. app/services/llm_client.py  — LLM 工厂(默认 mock)
+4. app/services/llm_client.py  — LLM 工厂(有 Key 则 live;CI 无 Key 走 mock)
 5. app/utils/sse.py            — SSE 行格式化
 ```
 
@@ -25,8 +25,8 @@ flowchart TD
     I --> J[推送 SSE: 结束事件]
     F --> K[获取 LLM 客户端]
     K --> L{LLM 模式}
-    L -->|mock 默认| M[模拟 LLM 客户端]
-    L -->|live| N[真实 LLM 客户端<br/>DeepSeek]
+    L -->|mock 或无密钥| M[模拟 LLM 客户端]
+    L -->|live 且有密钥| N[真实 LLM 客户端<br/>DeepSeek]
 ```
 
 ## 节点说明
