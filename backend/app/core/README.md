@@ -14,24 +14,24 @@
 
 ```mermaid
 flowchart TD
-    A[POST /api/v1/workflows/execute] --> B{stream?}
-    B -->|false| C[run_recommendation]
-    B -->|true| D[stream_recommendation]
-    C --> E[retrieve_products]
-    E --> F[generate_recommendation]
-    F --> G[返回 JSON: query/products/recommendation]
-    D --> H[按节点 yield updates]
-    H --> I[SSE event:node]
-    I --> J[SSE event:done]
-    F --> K[get_llm_client]
-    K --> L{LLM_MODE}
-    L -->|mock| M[MockLLMClient]
-    L -->|live| N[LiveLLMClient / DeepSeek]
+    A["接口: 执行工作流<br/>POST /api/v1/workflows/execute"] --> B{是否流式输出?}
+    B -->|否 stream=false| C[同步执行推荐工作流]
+    B -->|是 stream=true| D[流式执行推荐工作流]
+    C --> E[节点1: 检索商品]
+    E --> F[节点2: 生成推荐文案]
+    F --> G["返回 JSON<br/>查询词 / 商品列表 / 推荐语"]
+    D --> H[按节点逐步产出更新]
+    H --> I[推送 SSE: 节点事件]
+    I --> J[推送 SSE: 结束事件]
+    F --> K[获取 LLM 客户端]
+    K --> L{LLM 模式}
+    L -->|mock 默认| M[模拟 LLM 客户端]
+    L -->|live| N[真实 LLM 客户端<br/>DeepSeek]
 ```
 
 ## 节点说明
 
-| 节点 | 作用 |
+| 节点(代码名) | 作用 |
 |---|---|
 | `retrieve_products` | 模拟商品检索(关键词过滤 MOCK_CATALOG) |
 | `generate_recommendation` | 基于候选商品生成中文推荐话术 |
