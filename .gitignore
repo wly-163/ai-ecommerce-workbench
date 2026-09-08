@@ -33,3 +33,13 @@ Thumbs.db
 
 # Docker
 postgres_data/
+
+# Private / not for GitHub
+prd.md
+PRD.md
+**/prd.md
+.cursor/
+*.pem
+credentials.json
+secrets.json
+*.local.md
