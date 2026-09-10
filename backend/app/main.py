@@ -17,7 +17,7 @@ app = FastAPI(title="AI E-Commerce Workbench API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 允许任何网站来请求（开发方便，生产通常要收紧）
-    allow_credentials=True,  # 允许带 cookie / 登录凭证
+    allow_credentials=False,  # 与 allow_origins=["*"] 不能同时为 True，否则浏览器会拦 CORS
     allow_methods=["*"],  # 允许 GET、POST 等各种方法
     allow_headers=["*"],  # 允许各种请求头
 )

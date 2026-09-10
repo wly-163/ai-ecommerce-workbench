@@ -21,7 +21,7 @@ describe("executeWorkflow", () => {
     const result = await executeWorkflow("海边防晒");
     expect(result.products[0].category).toBe("外套");
     expect(fetchMock).toHaveBeenCalledWith(
-      "http://localhost:8000/api/v1/workflows/execute",
+      "/api/v1/workflows/execute",
       expect.objectContaining({
         method: "POST",
         headers: { "Content-Type": "application/json" },

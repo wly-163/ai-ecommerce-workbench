@@ -11,7 +11,7 @@ export type WorkflowExecuteResult = {
   recommendation: string;
 };
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+const API_URL = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 
 export async function executeWorkflow(query: string): Promise<WorkflowExecuteResult> {
   const resp = await fetch(`${API_URL}/api/v1/workflows/execute`, {
