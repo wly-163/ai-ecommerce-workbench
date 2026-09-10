@@ -61,6 +61,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Playwright
+        run: |
+          npx playwright install --with-deps chromium
+          npx playwright test
+
   docker:
     runs-on: ubuntu-latest
     needs: [backend, frontend]

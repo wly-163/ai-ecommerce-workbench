@@ -6,11 +6,11 @@
 
 ---
 
-## 当前状态 (最后更新: 2026-09-01 · by AI)
+## 当前状态 (最后更新: 2026-09-10 · by AI)
 
-- **阶段**:`开发中`(US-3 已合并;规范补注释/流程图;下一步 US-4 设计)
-- **上一步完成**:`PR #5 合并;补充阅读顺序注释 + core/README 流程图 + 02/04 规范`
-- **下一步 (TODO 第一条)**:`确认 US-4 3D MVP 方案后开 feature/4-3d-scene`
+- **阶段**:`开发中`(US-4 实现已完成,待推送并发 PR)
+- **上一步完成**:`本地查询走 Vite /api 代理; CORS 通配 origin 不再带 credentials`
+- **下一步 (TODO 第一条)**:`推送 feature/4-3d-scene 并发 PR; 合并后开始 US-5 智能导购`
 - **阻塞项**:`无`
 
 ---
@@ -42,6 +42,10 @@
 - 改写已 push 的 commit 后再 push 会 non-fast-forward → feature 分支用 `--force-with-lease`。
 - Vercel Root Directory=frontend 时,CD 不要再设 working-directory:frontend。
 - Railway 公网端口填 8000;验证用 `/health`。
+- FastAPI `allow_origins=["*"]` 不能与 `allow_credentials=True` 同时用,浏览器会直接拦 CORS。
+- 前端默认 `VITE_API_URL=""` 走相对路径 `/api`,由 Vite 代理到后端;写死 `localhost:8000` 时若页面开在 `127.0.0.1` 会跨域。
+- 重启 uvicorn 前先看 `netstat :8000`,残留的旧 reloader 会抢走请求(例如 DeepSeek 402 的旧进程)。
+- DeepSeek 返回 402 Insufficient Balance 时,进程环境设 `LLM_MODE=mock` 可继续演示(dotenv 不覆盖已有环境变量)。
 
 ---
 
