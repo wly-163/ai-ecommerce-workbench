@@ -1,5 +1,7 @@
 import pytest
 
+from app.db import init_db, reset_engine
+
 
 @pytest.fixture(autouse=True)
 def _default_mock_llm(monkeypatch) -> None:
@@ -9,3 +11,10 @@ def _default_mock_llm(monkeypatch) -> None:
     需要测 live 构造的用例再自己 monkeypatch 覆盖。
     """
     monkeypatch.setenv("LLM_MODE", "mock")
+
+
+@pytest.fixture(autouse=True)
+def _sqlite_db(monkeypatch) -> None:
+    monkeypatch.setenv("DATABASE_URL", "sqlite://")
+    reset_engine()
+    init_db()
