@@ -4,10 +4,12 @@
 
 ```text
 1. app/main.py                 — 挂载路由
-2. app/api/v1/workflows.py     — HTTP 入口(JSON / SSE)
-3. app/core/workflow.py        — LangGraph 状态与节点
-4. app/services/llm_client.py  — LLM 工厂(有 Key 则 live;CI 无 Key 走 mock)
-5. app/utils/sse.py            — SSE 行格式化
+2. app/api/v1/workflows.py     — 工作流 HTTP 入口(JSON / SSE)
+3. app/api/v1/chat.py          — 导购聊天(会话落库 + 按节点 SSE)
+4. app/core/workflow.py        — LangGraph 状态与节点
+5. app/services/llm_client.py  — LLM 工厂(有 Key 则 live;CI 无 Key 走 mock)
+6. app/utils/sse.py            — SSE 行格式化
+7. app/db.py / app/models/chat.py — 会话表
 ```
 
 ## 流程图
@@ -27,6 +29,21 @@ flowchart TD
     K --> L{LLM 模式}
     L -->|mock 或无密钥| M[模拟 LLM 客户端]
     L -->|live 且有密钥| N[真实 LLM 客户端<br/>DeepSeek]
+```
+
+```mermaid
+flowchart TD
+    P["用户发话<br/>POST /api/v1/chat"] --> Q[写入会话与用户消息]
+    Q --> R[SSE: session]
+    R --> S[节点1: 检索商品]
+    S --> T[SSE: node 商品]
+    T --> U[节点2: 生成推荐 含历史]
+    U --> V{LLM 成功?}
+    V -->|是| W[写入助手消息]
+    W --> X[SSE: node 推荐语]
+    X --> Y[SSE: done]
+    V -->|否| Z[SSE: error]
+    Z --> Y
 ```
 
 ## 节点说明
