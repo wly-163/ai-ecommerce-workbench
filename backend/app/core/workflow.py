@@ -32,6 +32,7 @@ class WorkflowState(TypedDict):
     query: str  # 用户原话,全程只读
     products: list[dict]  # 节点1 写入
     recommendation: str  # 节点2 写入
+    history: list[dict]  # 多轮导购上文;execute 入口默认为空
 
 
 def retrieve_products(state: WorkflowState) -> dict:
@@ -45,11 +46,26 @@ def retrieve_products(state: WorkflowState) -> dict:
     return {"products": hits}
 
 
+def _history_block(history: list[dict]) -> str:
+    if not history:
+        return ""
+    lines = []
+    for item in history:
+        label = "用户" if item.get("role") == "user" else "导购"
+        lines.append(f"{label}：{item.get('content', '')}")
+    return "对话历史：\n" + "\n".join(lines) + "\n"
+
+
 def generate_recommendation(state: WorkflowState) -> dict:
     """节点2:把候选商品塞进 prompt;有 API Key 走真模型,否则 mock。"""
     client = get_llm_client()
     catalog = "、".join(f"{p['name']}(¥{p['price']})" for p in state["products"])
-    prompt = f"用户需求：{state['query']}\n候选商品：{catalog}\n请用一两句中文给出推荐理由。"
+    prompt = (
+        f"{_history_block(list(state.get('history') or []))}"
+        f"用户需求：{state['query']}\n"
+        f"候选商品：{catalog}\n"
+        "请用一两句中文给出推荐理由。"
+    )
     return {"recommendation": client.complete(prompt)}
 
 
@@ -64,17 +80,29 @@ def build_recommendation_graph():
     return graph.compile()
 
 
-def run_recommendation(query: str) -> dict:
+def run_recommendation(query: str, history: list[dict] | None = None) -> dict:
     """同步跑完整张图,返回最终 WorkflowState。给 /docs、Postman 一次性拿结果。"""
     app = build_recommendation_graph()
-    # products/recommendation 必须先占位,TypedDict 三个键缺一不可
-    return app.invoke({"query": query, "products": [], "recommendation": ""})
+    # products/recommendation/history 必须先占位,TypedDict 键缺一不可
+    return app.invoke(
+        {
+            "query": query,
+            "products": [],
+            "recommendation": "",
+            "history": history or [],
+        }
+    )
 
 
-def stream_recommendation(query: str) -> Iterator[dict]:
+def stream_recommendation(query: str, history: list[dict] | None = None) -> Iterator[dict]:
     """按节点产出 updates,每个元素形如 {节点名: 增量状态},供 SSE 推送。"""
     app = build_recommendation_graph()
     yield from app.stream(
-        {"query": query, "products": [], "recommendation": ""},
+        {
+            "query": query,
+            "products": [],
+            "recommendation": "",
+            "history": history or [],
+        },
         stream_mode="updates",  # 不要 values:values 是全量快照,前端不好判断刚完成哪一站
     )

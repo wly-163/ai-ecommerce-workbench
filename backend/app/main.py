@@ -1,17 +1,34 @@
 # 阅读顺序:
 # 1. FastAPI app + CORS  — HTTP 应用本体(开发期放开跨域)
-# 2. include_router      — 挂上 /api/v1/workflows
+# 2. include_router      — 挂上 /api/v1/workflows 与 /api/v1/chat
 # 3. /health             — 给 Docker/Railway 探活,不跑工作流
 #
 # .env 在 app/__init__.py 里加载,本文件不用再读配置。
 # 流程图: backend/app/core/README.md
 
+import logging
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.v1.chat import router as chat_router
 from app.api.v1.workflows import router as workflows_router
+from app.db import init_db
 
-app = FastAPI(title="AI E-Commerce Workbench API", version="0.1.0")
+logger = logging.getLogger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    try:
+        init_db()
+    except Exception:
+        logger.exception("init_db failed; /health still available")
+    yield
+
+
+app = FastAPI(title="AI E-Commerce Workbench API", version="0.1.0", lifespan=lifespan)
 
 # 前端 Vite 在 5173,后端在 8000,浏览器会拦跨域。开发先全放行;上线必须改成白名单。
 app.add_middleware(
@@ -23,6 +40,7 @@ app.add_middleware(
 )
 
 app.include_router(workflows_router)
+app.include_router(chat_router)
 
 
 @app.get("/health")

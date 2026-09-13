@@ -35,6 +35,14 @@ curl -X POST http://localhost:8000/api/v1/workflows/execute \
   -d "{\"query\":\"推荐防晒衣\"}"
 ```
 
+导购聊天（SSE；本地需要 Postgres，`DATABASE_URL` 指向 `postgresql://app:app@localhost:5432/workbench`。pytest 用 SQLite，不需要起库）：
+
+```bash
+curl -N -X POST http://localhost:8000/api/v1/chat \
+  -H "Content-Type: application/json" \
+  -d "{\"message\":\"推荐防晒衣\"}"
+```
+
 ---
 
 ### 本地开发(无 Docker)

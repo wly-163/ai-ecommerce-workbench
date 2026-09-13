@@ -6,12 +6,12 @@
 
 ---
 
-## 当前状态 (最后更新: 2026-09-10 · by AI)
+## 当前状态 (最后更新: 2026-09-13 · by AI)
 
-- **阶段**:`开发中`(US-4 实现已完成,待推送并发 PR)
-- **上一步完成**:`本地查询走 Vite /api 代理; CORS 通配 origin 不再带 credentials`
-- **下一步 (TODO 第一条)**:`推送 feature/4-3d-scene 并发 PR; 合并后开始 US-5 智能导购`
-- **阻塞项**:`无`
+- **阶段**:`开发中`(六步流程第③步 · US-5 聊天切片实现中)
+- **上一步完成**:`右侧导购聊天 + Postgres 会话 + 按节点 SSE; US-4 已合入 PR #9`
+- **下一步 (TODO 第一条)**:`本地门禁后推送 feature/5-ai-shopping-guide 并发 PR; RAG 下一切片`
+- **阻塞项**:`线上聊天需人类在 Railway 挂 Postgres`
 
 ---
 
@@ -20,8 +20,8 @@
 - [x] US-1 + US-2:骨架 + CI/CD
 - [x] US-3: LangGraph 工作流 API(PR #5)
 - [x] 代码可读性约定:注释阅读顺序 + Mermaid 流程图 + 中文 commit
-- [ ] US-4:3D 场景 MVP(第 3 周)
-- [ ] US-5:AI 智能导购(第 4 周)
+- [x] US-4:3D 场景 MVP(PR #9)
+- [ ] US-5:AI 智能导购(第 4 周) — 聊天切片进行中,RAG 未做
 
 ---
 
@@ -46,6 +46,8 @@
 - 前端默认 `VITE_API_URL=""` 走相对路径 `/api`,由 Vite 代理到后端;写死 `localhost:8000` 时若页面开在 `127.0.0.1` 会跨域。
 - 重启 uvicorn 前先看 `netstat :8000`,残留的旧 reloader 会抢走请求(例如 DeepSeek 402 的旧进程)。
 - DeepSeek 返回 402 Insufficient Balance 时,进程环境设 `LLM_MODE=mock` 可继续演示(dotenv 不覆盖已有环境变量)。
+- pytest 聊天库必须用 `sqlite://` + `StaticPool`,否则内存库每次连都是空的。
+- 导购聊天依赖 `DATABASE_URL`;没 Postgres 时 `/health` 仍 200,发消息会 503。
 
 ---
 
@@ -63,7 +65,7 @@
 ## 里程碑 (DONE)
 
 - [x] US-1~US-3 + CI/CD 全绿
-- [ ] M1: MVP(第 3 周末) — 3D 场景 + AI 工作流
+- [x] M1: MVP(第 3 周末) — 3D 场景 + AI 工作流
 - [ ] M2: 核心功能(第 7 周末)
 - [ ] M3: 体验增强(第 9 周末)
 - [ ] M4: 正式发布(第 10 周末)
