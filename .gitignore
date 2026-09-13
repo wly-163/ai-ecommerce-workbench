@@ -19,6 +19,9 @@ dist/
 .vscode/
 .idea/
 
+# Superpowers visual brainstorm (session mockups)
+.superpowers/
+
 # Data & uploads (never commit)
 data/
 uploads/
