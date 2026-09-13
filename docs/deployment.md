@@ -19,6 +19,8 @@ docker-compose up --build
 - 前端: http://localhost:5173
 - 后端健康检查: http://localhost:8000/health
 
+聊天接口需要 Postgres（compose 已带）。线上 Railway 需在控制台自行挂 Postgres 插件，并把 `DATABASE_URL` 配到后端服务；本仓库不代配插件。
+
 不装 Docker 时,可分别启动:
 
 ```bash

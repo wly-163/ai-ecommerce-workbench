@@ -82,7 +82,9 @@ ai-ecommerce-workbench/
 │   │   │   ├── tools.py          # 业务工具(订单查询/库存查询等)
 │   │   │   ├── rag.py            # RAG检索(向量+BM25+Rerank)
 │   │   │   └── agents.py         # 多智能体协作定义
+│   │   ├── db.py                 # SQLModel 引擎 / init_db
 │   │   ├── models/               # SQLModel 数据模型
+│   │   │   ├── chat.py           # 导购会话与消息
 │   │   │   ├── workflow.py       # 工作流定义表
 │   │   │   ├── order.py          # 订单表(模拟)
 │   │   │   ├── product.py        # 商品表(模拟)
